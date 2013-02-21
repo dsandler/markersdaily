@@ -39,6 +39,7 @@ class MainHandler(webapp2.RequestHandler):
     self.response.write('''<html>
 <head>
 <title>#markersdaily</title>
+<link rel="icon" type="image/png" href="/assets/img/markersdaily_favicon_32x32.png" />
 <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
 <style>
 body {
