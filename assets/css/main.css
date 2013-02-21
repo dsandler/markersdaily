@@ -1,0 +1,44 @@
+body {
+  font-family: 'Roboto Condensed', sans-serif;
+  background-image: url(/assets/img/checks.png);
+  background-attachment:fixed;
+  margin: 6px 0 0 6px;
+}
+.tile {
+  display: inline-block;
+  width: 250px;
+  height: 250px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  margin: 0 6px 6px 0;
+}
+.authorblock {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: block;
+  background-color: rgba(0,0,0,0.33);
+  color: #eee;
+  font-size: 12px;
+}
+.authorblock>div {
+  padding: 6px;
+}
+.authorblock h3 {
+  font-size: 125%;
+  margin: 0;
+}
+.plusone {
+  float: right;
+}
+@media screen and (max-device-width: 480px) {
+  html {
+    max-width: 520px;
+  }
+  .authorblock h3 {
+    font-size: 150%;
+  }
+}

@@ -1,12 +1,8 @@
 #!/usr/bin/env python
 
-DEBUG=True
-
 import webapp2
 import json
-
-if DEBUG:
-  import pprint
+import pprint
 
 from google.appengine.api import memcache
 from google.appengine.api import urlfetch
@@ -28,6 +24,22 @@ MARKERSDAILY_GPLUS_QUERY = \
 
 class MainHandler(webapp2.RequestHandler):
   def get(self):
+    DEBUG = 'debug' in self.request.GET and self.request.GET['debug']
+
+    self.response.write('''<html>
+<head>
+<title>#markersdaily</title>
+<link rel="icon" type="image/png" href="/assets/img/markersdaily_favicon_32x32.png" />
+<meta name="viewport" content="width=520" />
+<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
+<link href='/assets/css/main.css' rel='stylesheet' type='text/css'>
+<style>
+</style>
+</head>
+<body>
+
+''')
+
     record = memcache.get('results')
     results, etag = record if record else ([], '')
     if not results:
@@ -64,66 +76,10 @@ class MainHandler(webapp2.RequestHandler):
 
       memcache.add('results', (results, etag), CACHE_TIMEOUT_SEC)
 
-    self.response.write('''<html>
-<head>
-<title>#markersdaily</title>
-<link rel="icon" type="image/png" href="/assets/img/markersdaily_favicon_32x32.png" />
-<meta name="viewport" content="width=520" />
-<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
-<style>
-body {
-  font-family: 'Roboto Condensed', sans-serif;
-  background-image: url(/assets/img/checks.png);
-  background-attachment:fixed;
-  margin: 6px 0 0 6px;
-}
-.tile {
-  display: inline-block;
-  width: 250px;
-  height: 250px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  position: relative;
-  margin: 0 6px 6px 0;
-}
-.authorblock {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  display: block;
-  background-color: rgba(0,0,0,0.33);
-  color: #eee;
-  font-size: 12px;
-}
-.authorblock>div {
-  padding: 6px;
-}
-.authorblock h3 {
-  font-size: 125%;
-  margin: 0;
-}
-.plusone {
-  float: right;
-}
-@media screen and (max-device-width: 480px) {
-  html {
-    max-width: 520px;
-  }
-  .authorblock h3 {
-    font-size: 150%;
-  }
-}
-</style>
-</head>
-<body>
+    if DEBUG:
+      self.response.write('<!-- cache was %s, etag for results: %s -->\n\n' \
+        % ("hot" if record else "cold", etag))
 
-''')
-
-    self.response.write('<!-- cache was %s, etag for results: %s -->\n\n' \
-      % ("hot" if record else "cold", etag))
-    #self.response.write('Got %d items:<p>' % len(results))
     for post in results:
       obj=post['object']
 
