@@ -4,12 +4,12 @@ DEBUG=True
 
 import webapp2
 import json
-import urllib
 
 if DEBUG:
   import pprint
 
 from google.appengine.api import memcache
+from google.appengine.api import urlfetch
 
 from apikey import API_KEY
 
@@ -19,7 +19,7 @@ SECONDS=1
 MINUTES=60*SECONDS
 HOURS=60*MINUTES
 DAYS=24*HOURS
-CACHE_TIMEOUT_SEC=5*MINUTES
+CACHE_TIMEOUT_SEC=2*MINUTES
 
 MARKERSDAILY_GPLUS_QUERY = \
     "https://www.googleapis.com/plus/v1/activities?key=" \
@@ -28,20 +28,41 @@ MARKERSDAILY_GPLUS_QUERY = \
 
 class MainHandler(webapp2.RequestHandler):
   def get(self):
-    results = memcache.get('results')
-
+    record = memcache.get('results')
+    results, etag = record if record else ([], '')
     if not results:
       token = ''
-      results = []
       while len(results) < MAX_RESULTS:
-        page = urllib.urlopen(MARKERSDAILY_GPLUS_QUERY + "&pageToken=" + token)
-        j = json.load(page)
+        response = urlfetch.fetch(
+          url=MARKERSDAILY_GPLUS_QUERY + "&pageToken=" + token,
+          headers={'If-None-Match': etag})
+        if response.status_code != 200:
+          break
+        j = json.loads(response.content)
         if not j or 'nextPageToken' not in j:
           break
+        etag = j['etag']
         token = j['nextPageToken']
-        for item in j['items']:
-          results.append(item)
-      memcache.add('results', results, CACHE_TIMEOUT_SEC)
+
+        seen_urls=set()
+
+        for post in j['items']:
+          # try to skip reshares and find the root post
+          obj = post['object']
+          link = obj['url']
+          is_a_reshare = (link != post['url'])
+          if link in seen_urls:
+            if is_a_reshare:
+              continue
+            else:
+              for i in range(len(results)-1,-1,-1):
+                post2 = results[i]
+                if post2['object']['url'] == link:
+                  del results[i]
+          seen_urls.add(link)
+          results.append(post)
+
+      memcache.add('results', (results, etag), CACHE_TIMEOUT_SEC)
 
     self.response.write('''<html>
 <head>
@@ -97,10 +118,12 @@ body {
 </style>
 </head>
 <body>
-    ''')
 
+''')
+
+    self.response.write('<!-- cache was %s, etag for results: %s -->\n\n' \
+      % ("hot" if record else "cold", etag))
     #self.response.write('Got %d items:<p>' % len(results))
-    seen_urls=set()
     for post in results:
       obj=post['object']
 
@@ -135,10 +158,6 @@ body {
       who=actor['displayName']
 
       link=obj['url']
-
-      if link in seen_urls: continue
-
-      seen_urls.add(link)
 
       self.response.write('''<a
         href="%(link)s"
