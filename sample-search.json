@@ -1,0 +1,82 @@
+200 OK
+ 
+- Hide headers -
+ 
+cache-control:  private, max-age=0, must-revalidate, no-transform
+content-type:  application/json; charset=UTF-8
+date:  Thu, 21 Feb 2013 03:45:41 GMT
+etag:  "l9gWq2lTiBDNZWBx8kpM7h7VNYs/akvUShu4HeNJkgVhy2LC_LkcZ6M"
+expires:  Thu, 21 Feb 2013 03:45:41 GMT
+server:  GSE
+ 
+{
+ "kind": "plus#activityFeed",
+ "etag": "\"l9gWq2lTiBDNZWBx8kpM7h7VNYs/akvUShu4HeNJkgVhy2LC_LkcZ6M\"",
+ "nextPageToken": "CiwIw6ADEiSdv0W5wGm68HTxjnizyIIBs8iCAfLMmgGniNYBp4jWAaLWmQIYAxCZpZaJBRiZpZaJBSIA",
+ "selfLink": "https://www.googleapis.com/plus/v1/activities?query=%23markersdaily&maxResults=1&key=AIzaSyCFj15TpkchL4OUhLD1Q2zgxQnMb7v3XaM",
+ "title": "Google+ Activities Search Results",
+ "updated": "2013-02-21T03:20:57.724Z",
+ "items": [
+  {
+   "kind": "plus#activity",
+   "etag": "\"l9gWq2lTiBDNZWBx8kpM7h7VNYs/vjGVioTRh9qs9AmmYeGPSMCcyt0\"",
+   "title": "Incidentally, for #markersdaily  “the sea,” I ended up giving my son a quick rendition of The Great Wave...",
+   "published": "2013-02-21T03:20:57.724Z",
+   "updated": "2013-02-21T03:20:57.724Z",
+   "id": "z13zi5ui3vabsjkca22hvjkj2xmnfzvn2",
+   "url": "https://plus.google.com/114592751246503219483/posts/2691js12ZPT",
+   "actor": {
+    "id": "114592751246503219483",
+    "displayName": "Daniel Sandler",
+    "url": "https://plus.google.com/114592751246503219483",
+    "image": {
+     "url": "https://lh4.googleusercontent.com/-rUpfE68lDyQ/AAAAAAAAAAI/AAAAAAAAAAA/s1n6Z8UOklc/photo.jpg?sz=50"
+    }
+   },
+   "verb": "post",
+   "object": {
+    "objectType": "note",
+    "content": "Incidentally, for  <a class=\"ot-hashtag\" href=\"https://plus.google.com/s/%23markersdaily\">#markersdaily</a>  “the sea,” I ended up giving my son a quick rendition of The Great Wave as a lunch note. ",
+    "url": "https://plus.google.com/114592751246503219483/posts/2691js12ZPT",
+    "replies": {
+     "totalItems": 1,
+     "selfLink": "https://www.googleapis.com/plus/v1/activities/z13zi5ui3vabsjkca22hvjkj2xmnfzvn2/comments"
+    },
+    "plusoners": {
+     "totalItems": 3,
+     "selfLink": "https://www.googleapis.com/plus/v1/activities/z13zi5ui3vabsjkca22hvjkj2xmnfzvn2/people/plusoners"
+    },
+    "resharers": {
+     "totalItems": 1,
+     "selfLink": "https://www.googleapis.com/plus/v1/activities/z13zi5ui3vabsjkca22hvjkj2xmnfzvn2/people/resharers"
+    },
+    "attachments": [
+     {
+      "objectType": "photo",
+      "id": "114592751246503219483.5847240878181642434",
+      "content": "IMG_20130220_001520.jpg",
+      "url": "https://plus.google.com/photos/114592751246503219483/albums/5847240880801886385/5847240878181642434?authkey=CKTwzOmzm8OMrQE",
+      "image": {
+       "url": "https://lh3.googleusercontent.com/-m6Zr9i6XtoM/USWSmUQo8MI/AAAAAAAAwns/plJ9r-yzX54/w497-h373/IMG_20130220_001520.jpg",
+       "type": "image/jpeg",
+       "height": 373,
+       "width": 497
+      },
+      "fullImage": {
+       "url": "https://lh3.googleusercontent.com/-m6Zr9i6XtoM/USWSmUQo8MI/AAAAAAAAwns/plJ9r-yzX54/s0-d/IMG_20130220_001520.jpg",
+       "type": "image/jpeg",
+       "height": 1355,
+       "width": 1355
+      }
+     }
+    ]
+   },
+   "provider": {
+    "title": "Google+"
+   },
+   "access": {
+    "kind": "plus#acl"
+   }
+  }
+ ]
+}
