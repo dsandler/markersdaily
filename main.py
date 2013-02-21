@@ -116,6 +116,7 @@ body {
               pass
       if not img:
         img=str(post['actor']['image']['url'])
+        img=img.replace("?sz=50","?sz=250")
 
       plusone=''
       if 'plusoners' in obj:
