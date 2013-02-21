@@ -13,7 +13,14 @@ from google.appengine.api import memcache
 
 from apikey import API_KEY
 
-MAX_RESULTS=100
+MAX_RESULTS=64
+
+SECONDS=1
+MINUTES=60*SECONDS
+HOURS=60*MINUTES
+DAYS=24*HOURS
+CACHE_TIMEOUT_SEC=5*MINUTES
+
 MARKERSDAILY_GPLUS_QUERY = \
     "https://www.googleapis.com/plus/v1/activities?key=" \
     + API_KEY + "&query=markersdaily&maxResults=" \
@@ -34,18 +41,20 @@ class MainHandler(webapp2.RequestHandler):
         token = j['nextPageToken']
         for item in j['items']:
           results.append(item)
-      memcache.add('results', results, 120)
+      memcache.add('results', results, CACHE_TIMEOUT_SEC)
 
     self.response.write('''<html>
 <head>
 <title>#markersdaily</title>
 <link rel="icon" type="image/png" href="/assets/img/markersdaily_favicon_32x32.png" />
+<meta name="viewport" content="width=520" />
 <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
 <style>
 body {
   font-family: 'Roboto Condensed', sans-serif;
   background-image: url(/assets/img/checks.png);
   background-attachment:fixed;
+  margin: 6px 0 0 6px;
 }
 .tile {
   display: inline-block;
@@ -55,24 +64,35 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   position: relative;
+  margin: 0 6px 6px 0;
 }
-.author {
+.authorblock {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 238px;
+  width: 100%;
   display: block;
   background-color: rgba(0,0,0,0.33);
   color: #eee;
-  padding: 6px;
   font-size: 12px;
 }
-.author>h3 {
-  font-size: 15px;
+.authorblock>div {
+  padding: 6px;
+}
+.authorblock h3 {
+  font-size: 125%;
   margin: 0;
 }
 .plusone {
   float: right;
+}
+@media screen and (max-device-width: 480px) {
+  html {
+    max-width: 520px;
+  }
+  .authorblock h3 {
+    font-size: 150%;
+  }
 }
 </style>
 </head>
@@ -95,7 +115,7 @@ body {
             except KeyError:
               pass
       if not img:
-        img=post['actor']['image']['url']
+        img=str(post['actor']['image']['url'])
 
       plusone=''
       if 'plusoners' in obj:
@@ -119,18 +139,17 @@ body {
 
       seen_urls.add(link)
 
-      self.response.write('''
-      <a href="%(link)s"
+      self.response.write('''<a
+        href="%(link)s"
         class="tile"
         style="background-image: url('%(img)s');">
-        <span class="author">
+        <div class="authorblock"><div>
         <h3>%(author)s
           <span class="plusone">%(reshare)s %(plusone)s</span>
         </h3>
         %(title)s
-        </span>
-      </a>
-        ''' % dict(
+        </div></div>
+      </a>''' % dict(
           link=link,
           author=who,
           img=img,
